@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<h2>Şehir - Ülke İşlemleri</h2>
+<br />
+<button type="button" id="btngetlist" class="btn btn-outline-info">Şehir Listesi</button>
+<button type="button" id="btnaddcity" class="btn btn-outline-warning">Şehir Ekle</button>
+<button type="button" id="btngetbycity" class="btn btn-outline-warning">Id ye göre şehir getir</button>
+<button type="button" id="btnremovebycityid" class="btn btn-outline-danger">Id ye göre şehir sil</button>
+<br />
+<br />
+<div id="citylist">
+    Buraya Şehir Listesi Gelecek
+</div>
+<br /><br />
+<div id="citylisttwo">
+    Buraya Şehir gelecek
+</div>
+<div>
+    <input type="text" id="txtcity" placeholder="Şehir adını giriniz" class="form-control" />
+    <br />
+    <input type="text" id="txtdaynight" placeholder="Gün - Gece sayısı" class="form-control" />
+    <br />
+    <input type="text" id="txtprice" placeholder="Fiyat" class="form-control" />
+    <br />
+  
+</div>
+<br /><br />
+<div>
+    <input type="text" id="txtid" placeholder="Id giriniz" class="form-control" />
+</div>
+<br />
+<div>
+    <input type="text" id="txtcityid" placeholder="Silinecek Id giriniz" class="form-control" />
+</div>
+<script>
+    $("#btngetlist").click(function(){
+        $.ajax({
+            contentType:"application/json",
+            dataType:"json",
+            type:"Get",
+            url: "/Admin/City/CityList/",
+            success:function(func){
+                let w= jQuery.parseJSON(func);
+                console.log(w);
+                let tablehtml = "<table class=table table-bordered><tr><th>Şehir Adı</th><th>GeceGündüzBilgisi</th><th>Fiyat Bilgisi</th></tr>";
+                $.each(w,(index,value)=>{
+                    tablehtml += `<tr><td>${value.City}</td><td>${value.DayNight}</td><td>${value.Price}</td></tr>`;
+                });
+                tablehtml+="</table>";
+                $("#citylist").html(tablehtml);
+            }
+        });
+
+       
+
+    });
+    $("#btnaddcity").click(function(){
+        let cityvalues={
+            City:$("#txtcity").val(),
+            DayNight:$("#txtdaynight").val(),
+            Price:$("#txtprice").val(),
+            
+        };
+
+        $.ajax({
+            type:"post",
+            url: "/Admin/City/AddCityDestination/",
+            data:cityvalues,
+            success:function(func){
+                let result=jQuery.parseJSON(func);
+                alert("Şehir rota başarılı bir şekilde eklendi.");
+            }
+
+        });
+    });
+    $("#btngetbycity").click(function(){
+        var id = $("#txtid").val();
+
+        $.ajax({
+            dataType:"json",
+            type:"GET",
+            url: "/Admin/City/GetById/",
+            data: { DesninationId: id },
+            success:function(func2){
+                let result=jQuery.parseJSON(func2);
+                console.log(result);
+                let htmlstr = `<table class=table table-bordered><tr><th>Şehir Adı</th><th>GeceGündüzBilgisi</th><th>Fiyat Bilgisi</th></tr><tr><td>${result.City}</td><td>${result.DayNight}</td><td>${result.Price}</td></tr></table>`;
+                $("#citylisttwo").html(htmlstr);
+
+            },
+            error:function(request,error){
+                
+                $("#citylisttwo").html("<h2>Böyle bir şehir bulunamadı.</h2>");
+
+            }
+            
+
+        });
+    });
+    $('#btnremovebycityid').click(function(){
+        let id = $("#txtcityid").val();
+        $.ajax({
+            url:"/Admin/City/DeleteCity/"+id,
+            type:"post",
+            dataType:"json",
+            success:function(func3){
+               alert("Şehir Silindi");
+            }
+        });
+    });
+
+
+
+</script>

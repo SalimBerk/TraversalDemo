@@ -1,0 +1,43 @@
+﻿@using EntityLayer.Concrete
+@model List<Desnination>
+@{
+    ViewData["Title"] = "GetCitiesSearchByName";
+    Layout = "~/Views/Shared/_UserNewLayout.cshtml";
+}
+
+<h1>Tur Rotası Arama Sayfası</h1>
+<form asp-action="GetCitiesSearchByName" method="get" asp-area="Member">
+    <div>
+        <p>
+            Lütfern Aranacak Şehri Giriniz : <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
+            <br />
+            <input type="submit" value="Şehir Ara" class="btn btn-outline-warning" />
+        </p>
+    </div>
+</form>
+<table class="table table-bordered">
+    <tr>
+        <th>#</th>
+        <th>Şehir</th>
+        <th>Süre</th>
+        <th>Kapasite</th>
+        <th>Fiyat</th>
+        <td>Açıklama</td>
+        <th>Detaylar</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.DesninationId</td>
+            <td>@item.City</td>
+            <td>@item.DayNight</td>
+            <td>@item.Capacity</td>
+            <td>@item.Price</td>
+            <td>@item.Description</td>
+            <td><a href="#" class="btn btn-outline-info">Detaylar</a></td>
+        </tr>
+
+    }
+
+</table>
+

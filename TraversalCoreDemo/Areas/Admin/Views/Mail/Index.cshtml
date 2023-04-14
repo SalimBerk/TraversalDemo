@@ -1,0 +1,21 @@
+﻿@model TraversalCoreDemo.Models.MailRequest
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<form method="post">
+    <div class="form-group">
+        @Html.Label("Alıcı Mail Adresi")
+        <br />
+        <input type="text" asp-for="ReceiverMail" class="form-control" />
+    </div>
+    <div class="form-group">
+        @Html.Label("Konu Başlığı")
+        <br />
+        <input type="text" asp-for="Subject" class="form-control" />
+    </div>
+    <button class="btn btn-outline-success">Mail Gönder</button>
+
+</form>
+
